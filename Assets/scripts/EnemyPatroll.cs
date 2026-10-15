@@ -21,7 +21,7 @@ public class EnemyPatroll : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb.velocity = new Vector2(movinRight?speed:-speed, rb.velocity.y);
+        rb.linearVelocity = new Vector2(movinRight?speed:-speed, rb.velocity.y);
         Vector2 direction = movinRight ? Vector2.right : Vector2.left;
         RaycastHit2D isGroundAhead = Physics2D.Raycast(groundCheck.position, Vector2.down, distanceToGround, groundLayer);
         RaycastHit2D isWallAhead = Physics2D.Raycast(transform.position, direction, distanceToWall, groundLayer);

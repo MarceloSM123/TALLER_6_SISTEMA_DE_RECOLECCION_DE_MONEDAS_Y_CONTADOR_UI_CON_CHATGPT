@@ -1,0 +1,84 @@
+-------------------------------------------------------
+
+estoy creando un juego 2d en unity 6 este es mi codigo actual de movimiento:
+using UnityEngine;
+
+public class player_controller : MonoBehaviour
+{
+private Rigidbody2D rd;
+    public float speed=7f;
+    public float jumpForce=10f; 
+    private bool isGrounded;
+    private Animator animator;
+
+    private bool facingRight=true;
+
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        rd=GetComponent<Rigidbody2D>();
+        animator=GetComponent<Animator>();
+    }
+
+    // Update is called once per frame
+    void Update() 
+    {
+                float move=Input.GetAxis("Horizontal");
+                float speedAnimation=Mathf.Abs(move);
+                animator.SetFloat("speed",speedAnimation);
+        rd.velocity=new Vector2(move * speed, rd.velocity.y); // no se mueve en el eje y
+        // salto 
+        if(Input.GetKeyDown(KeyCode.Space) && isGrounded){
+            rd.AddForce(Vector2.up * jumpForce,ForceMode2D.Impulse);
+            isGrounded=false;
+            animator.SetBool("isJump",true);
+        }   
+        if(move>0 && !facingRight){
+            Flip();
+        }else if(move<0 && facingRight){
+            Flip();
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision){
+if(collision.gameObject.CompareTag("ground")){
+    isGrounded=true;
+    animator.SetBool("isJump",false);
+}
+    }
+
+    void OnCollisionExit2D(Collision2D collision){
+if(collision.gameObject.CompareTag("ground")){
+    isGrounded=false;
+
+}
+    }
+
+    void Flip(){
+        facingRight=!facingRight;
+        Vector3 scale=transform.localScale;
+        scale.x*=-1;
+        transform.localScale=scale;
+    }
+}
+
+
+crea un nuevo script con c# llamado playerHealt para manejar 3 vidas, 
+al colisionar con un objeto tagged enemy, debe restar una vida, activa el 
+trigger hurt, dar un segundo de invulnerabilidad y aplica un empujon de 
+rechazo, si llega 0 vidas reincia el nivel usando SceneManager.loadScene 
+indicame que lineas debo agregar en el update de mi player controler para 
+evitar que las teclas se anulen en el empujon
+
+-------------------------------------------
+
+PARA ACTIVAR LOS CORAZONES 
+
+------------------------------------
+tengo mi personaje con el script PlayerHealt ya en el inspect del personaje 
+y tambien en mi escena cuento con un canva con 3 imagenes de corazon. necesito
+ un script llamado HealtUI para que las imagenes de los corazones aparezcan 
+o desaparezcan en pantalla segun las vidas de mi personaje (3) dame el codigo 
+del script HealtUI e indicame que necesito para conectarlo si necesito arrastrar 
+elementos a la ventana del inspector.
